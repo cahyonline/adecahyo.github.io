@@ -15,6 +15,9 @@
     background: #fffbf5;
     color: #3a3a3a;
     line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
   }
   header {
     background: #00703c;
@@ -27,14 +30,17 @@
   }
   main {
     max-width: 900px;
-    margin: 2rem auto 4rem auto;
+    margin: 2rem auto 2rem auto;
     padding: 0 1.5rem;
+    flex-grow: 1;
+  }
+  section {
+    margin-bottom: 2.5rem;
   }
   section.menu-item {
     background: #f3f7f1;
     border-radius: 12px;
     padding: 1.5rem 2rem;
-    margin-bottom: 2.5rem;
     box-shadow: 0 6px 15px rgba(0,112,60,0.15);
   }
   section.menu-item h2 {
@@ -81,7 +87,7 @@
     font-weight: 600;
     color: #004422;
   }
-  select, input[type="text"], input[type="email"] {
+  select, input[type="text"], input[type="email"], input[type="number"], textarea {
     width: 100%;
     padding: 0.6rem 0.8rem;
     margin-bottom: 1.2rem;
@@ -91,31 +97,50 @@
     font-family: 'Poppins', sans-serif;
     transition: border-color 0.3s ease;
   }
-  select:focus, input[type="text"]:focus, input[type="email"]:focus {
+  select:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="number"]:focus, textarea:focus {
     border-color: #4caf50;
     outline: none;
   }
   .coupon-section {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
   }
   .coupon-section input {
-    width: 60%;
-    display: inline-block;
+    flex-grow: 1;
+    min-width: 180px;
   }
   .coupon-section button {
-    width: 35%;
-    display: inline-block;
     background: #4caf50;
     color: white;
     font-weight: 700;
     border: none;
     border-radius: 8px;
-    padding: 0.55rem 0;
+    padding: 0.55rem 1.5rem;
     cursor: pointer;
     transition: background 0.3s ease;
   }
-  .coupon-section button:hover {
+  .coupon-section button:disabled {
+    background: #9fd6a1;
+    cursor: not-allowed;
+  }
+  .coupon-section button:hover:not(:disabled) {
     background: #388e3c;
+  }
+  button#claimCouponBtn {
+    background: #00703c;
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 8px;
+    padding: 0.55rem 1.5rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  button#claimCouponBtn:hover {
+    background: #004d26;
   }
   button#submit-order {
     background: #00703c;
@@ -128,6 +153,7 @@
     cursor: pointer;
     transition: background 0.3s ease;
     margin-top: 1rem;
+    width: 100%;
   }
   button#submit-order:hover {
     background: #004d26;
@@ -137,22 +163,35 @@
     font-weight: 600;
     margin-top: -1rem;
     margin-bottom: 1rem;
+    min-height: 1.2em;
   }
   footer {
     background: #004d26;
     color: white;
     text-align: center;
-    padding: 1.5rem 0;
+    padding: 1.5rem 0 3rem 0;
     font-weight: 600;
+    margin-top: auto;
+  }
+  footer .owner {
+    margin-top: 1rem;
+    font-weight: normal;
+    font-size: 0.95rem;
+    color: #a7d9a7;
+  }
+  footer .phone {
+    font-weight: 600;
+    margin-top: 0.25rem;
   }
   @media (max-width: 600px) {
+    .coupon-section {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
     .coupon-section input, .coupon-section button {
       width: 100%;
       display: block;
-      margin-bottom: 0.7rem;
-    }
-    .coupon-section button {
-      margin-bottom: 1rem;
+      margin-bottom: 0;
     }
   }
 </style>
@@ -162,8 +201,14 @@
   UMKM Pecel Lele
 </header>
 <main>
-  <section class="menu-item" id="hemat-10rb">
-    <h2>Pecel Lele Hemat <span style="color:#00703c;">10rb Rupiah</span></h2>
+  <section id="introduction" aria-label="Pengenalan dan Sejarah Pecel Lele">
+    <h2 style="color: #00703c; font-weight:700; margin-bottom:0.75rem;">Pengenalan dan Sejarah Pecel Lele</h2>
+    <p>Pecel Lele adalah hidangan tradisional Indonesia yang populer, terutama di Jawa dan sekitarnya. Lele goreng renyah disajikan dengan sambal pedas dan nasi putih hangat, menjadikannya favorit di banyak kalangan sejak lama. UMKM kami menghadirkan berbagai pilihan Pecel Lele dengan cita rasa khas, disajikan lengkap dengan es teh segar.</p>
+    <p>Gunakan Voucher "DISKON10" sekarang!</p>
+  </section>
+
+  <section class="menu-item" id="hemat-10rb" tabindex="0" aria-labelledby="menu1-title">
+    <h2 id="menu1-title">Pecel Lele Hemat <span style="color:#00703c;">10rb Rupiah</span></h2>
     <p class="description">Seporsi pecel lele lezat dengan sambal istimewa, disajikan dengan nasi hangat dan teh es segar.</p>
     <p class="price">Harga: Rp 10.000,- <br /><span class="with-ice-tea">Semua menu sudah termasuk es teh.</span></p>
     <video controls poster="pecel-lele-hemat.jpg" aria-label="Video Pecel Lele Hemat">
@@ -172,8 +217,8 @@
     </video>
   </section>
 
-  <section class="menu-item" id="jumbo-17rb">
-    <h2>Pecel Lele Jumbo <span style="color:#00703c;">17rb Rupiah</span></h2>
+  <section class="menu-item" id="jumbo-17rb" tabindex="0" aria-labelledby="menu2-title">
+    <h2 id="menu2-title">Pecel Lele Jumbo <span style="color:#00703c;">17rb Rupiah</span></h2>
     <p class="description">Pecel lele dengan porsi jumbo, cocok untuk kamu yang lapar banget. Dilengkapi sambal kremes dan teh es.</p>
     <p class="price">Harga: Rp 17.000,- <br /><span class="with-ice-tea">Semua menu sudah termasuk es teh.</span></p>
     <video controls poster="pecel-lele-jumbo.jpg" aria-label="Video Pecel Lele Jumbo">
@@ -182,8 +227,8 @@
     </video>
   </section>
 
-  <section class="menu-item" id="kremes-15rb">
-    <h2>Pecel Lele Kremes <span style="color:#00703c;">15rb Rupiah</span></h2>
+  <section class="menu-item" id="kremes-15rb" tabindex="0" aria-labelledby="menu3-title">
+    <h2 id="menu3-title">Pecel Lele Kremes <span style="color:#00703c;">15rb Rupiah</span></h2>
     <p class="description">Lele goreng renyah dengan taburan kremes gurih, disajikan lengkap dengan nasi dan es teh.</p>
     <p class="price">Harga: Rp 15.000,- <br /><span class="with-ice-tea">Semua menu sudah termasuk es teh.</span></p>
     <video controls poster="pecel-lele-kremes.jpg" aria-label="Video Pecel Lele Kremes">
@@ -197,7 +242,7 @@
       <h3>Order Sekarang</h3>
 
       <label for="menuSelect">Pilih Menu</label>
-      <select id="menuSelect" name="menu" required aria-required="true">
+      <select id="menuSelect" name="menu" required aria-required="true" aria-describedby="menuHelp">
         <option value="" disabled selected>-- Pilih menu --</option>
         <option value="Pecel Lele Hemat">Pecel Lele Hemat - Rp 10.000</option>
         <option value="Pecel Lele Jumbo">Pecel Lele Jumbo - Rp 17.000</option>
@@ -213,10 +258,13 @@
       <label for="phone">Nomor Telepon</label>
       <input type="text" id="phone" name="phone" placeholder="Masukkan nomor telepon" required aria-required="true" pattern="[0-9+\- ]+" title="Masukkan nomor telepon yang benar" />
 
-      <label for="coupon">Kupon Diskon (opsional)</label>
-      <div class="coupon-section">
-        <input type="text" id="coupon" name="coupon" placeholder="Masukkan kode kupon" />
-        <button type="button" id="applyCouponBtn">Gunakan Kupon</button>
+      <label for="address">Alamat Pengiriman</label>
+      <textarea id="address" name="address" placeholder="Masukkan alamat lengkap pengiriman" required aria-required="true" rows="3"></textarea>
+
+      <div class="coupon-section" aria-label="Kupon Diskon">
+        <button type="button" id="claimCouponBtn" aria-live="polite" aria-pressed="false">Klaim Kupon</button>
+        <input type="text" id="coupon" name="coupon" placeholder="Masukkan kode kupon" disabled aria-disabled="true" />
+        <button type="button" id="applyCouponBtn" disabled>Gunakan Kupon</button>
       </div>
       <p id="couponMessage" class="discount-info" aria-live="polite"></p>
 
@@ -227,16 +275,21 @@
 
 <footer>
   &copy; 2024 UMKM Pecel Lele - Semua hak dilindungi.
+  <div class="owner" tabindex="0" aria-label="Owner info">
+    <strong>Ade Cahyo Nurrohman</strong><br />
+    <span class="phone">02322147388</span>
+  </div>
 </footer>
 
 <script>
   (() => {
-    const couponBtn = document.getElementById('applyCouponBtn');
+    const claimBtn = document.getElementById('claimCouponBtn');
     const couponInput = document.getElementById('coupon');
+    const couponApplyBtn = document.getElementById('applyCouponBtn');
     const couponMessage = document.getElementById('couponMessage');
     const orderForm = document.getElementById('orderForm');
 
-    // Example valid coupons and discounts
+    // Coupons and discounts
     const coupons = {
       "DISKON10": 0.10,
       "PECELHEMAT": 0.15,
@@ -244,11 +297,28 @@
     };
 
     let appliedDiscount = 0;
+    let couponClaimed = false;
 
-    couponBtn.addEventListener('click', () => {
+    claimBtn.addEventListener('click', () => {
+      if (!couponClaimed) {
+        couponInput.disabled = false;
+        couponInput.setAttribute('aria-disabled', 'false');
+        couponApplyBtn.disabled = false;
+        couponClaimed = true;
+        claimBtn.setAttribute('aria-pressed', 'true');
+        claimBtn.textContent = 'Kupon Diklaim';
+        claimBtn.disabled = true;
+        couponMessage.textContent = 'Masukkan kode kupon dan klik "Gunakan Kupon".';
+        couponMessage.style.color = '#207a20';
+        couponInput.focus();
+      }
+    });
+
+    couponApplyBtn.addEventListener('click', () => {
       const code = couponInput.value.trim().toUpperCase();
       if (!code) {
         couponMessage.textContent = 'Masukkan kode kupon terlebih dahulu.';
+        couponMessage.style.color = '#a00';
         appliedDiscount = 0;
         return;
       }
@@ -270,8 +340,9 @@
       const quantity = parseInt(orderForm.quantity.value);
       const name = orderForm.name.value.trim();
       const phone = orderForm.phone.value.trim();
+      const address = orderForm.address.value.trim();
 
-      if (!menu || !quantity || !name || !phone) {
+      if (!menu || !quantity || !name || !phone || !address) {
         alert('Mohon lengkapi semua data untuk melakukan pemesanan.');
         return;
       }
@@ -292,20 +363,22 @@
 
       totalPrice = Math.round(totalPrice);
 
-      const formattedPrice = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(totalPrice);
-      
-      alert(
-        `Terima kasih, ${name}! Pesanan Anda: \n- Menu: ${menu}\n- Jumlah: ${quantity}\n` +
-        (appliedDiscount > 0 ? `- Diskon: ${(appliedDiscount * 100).toFixed(0)}%\n` : '') +
-        `- Total Bayar: ${formattedPrice}\n\n` +
-        `Kami akan segera menghubungi Anda di nomor ${phone} untuk konfirmasi.`
-      );
+      // Encode order details for query string
+      const params = new URLSearchParams({
+        menu,
+        quantity,
+        name,
+        phone,
+        address,
+        discount: appliedDiscount > 0 ? appliedDiscount : 0,
+        totalPrice
+      });
 
-      orderForm.reset();
-      couponMessage.textContent = '';
-      appliedDiscount = 0;
+      // Redirect to payment.html with order info
+      window.location.href = `payment.html?${params.toString()}`;
     });
   })();
 </script>
 </body>
 </html>
+
